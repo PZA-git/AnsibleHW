@@ -39,6 +39,7 @@
     - name: Ensure rsync package is present
       apt:
         name: rsync
+        state: present
     - name: Synchronization war file
       synchronize:
         mode: pull

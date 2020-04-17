@@ -1,0 +1,34 @@
+---
+- name: create war file
+  hosts: comp
+  become: yes
+
+  tasks:
+  - name: Ensure git package is present
+    apt:
+      name: git
+      state: present
+  - name: Ensure boxfuse direcotry is present
+    git:
+      repo:https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
+      dest: /usr/myapp
+  - name: Ensure maven package is present
+    service:
+      name: maven
+      state: present
+  -name: Ensure maven
+- name: start tomcat
+  hosts: prod
+  become: yes
+
+  tasks:
+  - name: Ensure tomcat is present
+    apt:
+      name: tomcat
+      state: present
+  - name: Ensure tomcat service is started
+    service:
+      name: tomcat
+      state: started
+
+

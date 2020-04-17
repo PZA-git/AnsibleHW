@@ -20,11 +20,6 @@
       shell: "mvn package"
       args:
         chdir: /usr/myapp        
-    - name: Synchronization war file
-      synchronize:
-        mode: push
-        src: /usr/myapp/target/hello-1.0.war
-        dest: rsync://prod/var/lib/tomcat8/webapps/    
   - name: start tomcat
     hosts: prod
     become: yes
@@ -37,5 +32,6 @@
       service:
         name: tomcat8
         state: started
-  
-    
+    - name: Synchronization war file
+      synchronize: src=/usr/myapp/target/hello-1.0.war dest=/var/lib/tomcat8/webapps/     
+    delegate_to: comp

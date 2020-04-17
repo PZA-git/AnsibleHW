@@ -8,10 +8,6 @@
       apt:
         name: git
         state: present
-    - name: Ensure rsync package is present
-      apt:
-        name: rsync
-        state: present
     - name: Ensure boxfuse direcotry is present
       git:
         repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
@@ -23,7 +19,12 @@
     - name: Compile war file
       shell: "mvn package"
       args:
-        chdir: /usr/myapp
+        chdir: /usr/myapp        
+    - name: Synchronization war file
+      synchronize:
+        mode: push
+        src: /usr/myapp/target/hello-1.0.war
+        dest: rsync://prod/var/lib/tomcat8/webapps/    
   - name: start tomcat
     hosts: prod
     become: yes
@@ -36,13 +37,5 @@
       service:
         name: tomcat8
         state: started
-    - name: Ensure rsync package is present
-      apt:
-        name: rsync
-        state: present
-    - name: Synchronization war file
-      synchronize:
-        mode: pull
-        src: rsync://comp/usr/myapp/target/
-        dest: /var/lib/tomcat8/webapps/      
+  
     

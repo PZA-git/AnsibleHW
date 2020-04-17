@@ -34,4 +34,4 @@
         state: started
     - name: Synchronization war file
       synchronize: src=/usr/myapp/target/hello-1.0.war dest=/var/lib/tomcat8/webapps/     
-    delegate_to: comp
+    

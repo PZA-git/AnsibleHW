@@ -16,11 +16,14 @@
     service:
       name: maven
       state: present
-  -name: Ensure maven
+  - name: Compile war file
+     shell: mvn package
+       args:
+        chdir: /usr/myapp
+
 - name: start tomcat
   hosts: prod
   become: yes
-
   tasks:
   - name: Ensure tomcat is present
     apt:

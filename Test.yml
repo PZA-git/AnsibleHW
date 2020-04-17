@@ -12,7 +12,7 @@
       apt:
         name: rsync
         state: present
-        - name: Ensure boxfuse direcotry is present
+    - name: Ensure boxfuse direcotry is present
       git:
         repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
         dest: /usr/myapp
@@ -36,12 +36,12 @@
       service:
         name: tomcat8
         state: started
-        - name: Ensure rsync package is present
-        apt:
-          name: rsync
-      - name: Synchronization war file
-        synchronize:
-          mode: pull
-          src: rsync://comp/usr/myapp/target/
-          dest: /var/lib/tomcat8/webapps/      
+    - name: Ensure rsync package is present
+      apt:
+        name: rsync
+    - name: Synchronization war file
+      synchronize:
+        mode: pull
+        src: rsync://comp/usr/myapp/target/
+        dest: /var/lib/tomcat8/webapps/      
     

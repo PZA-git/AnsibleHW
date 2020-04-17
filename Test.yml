@@ -1,37 +1,40 @@
 ---
-- name: create war file
-  hosts: comp
-  become: yes
-
-  tasks:
-  - name: Ensure git package is present
-    apt:
-      name: git
-      state: present
-  - name: Ensure boxfuse direcotry is present
-    git:
-      repo:https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
-      dest: /usr/myapp
-  - name: Ensure maven package is present
-    service:
-      name: maven
-      state: present
-  - name: Compile war file
-     shell: mvn package
-       args:
+  - name: create war file
+    hosts: comp
+    become: yes
+  
+    tasks:
+    - name: Ensure git package is present
+      apt:
+        name: git
+        state: present
+    - name: Ensure boxfuse direcotry is present
+      git:
+        repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
+        dest: /usr/myapp
+    - name: Ensure maven package is present
+      apt:
+        name: maven
+        state: present
+    - name: Compile war file
+      shell: "mvn package"
+      args:
         chdir: /usr/myapp
+  - name: start tomcat
+    hosts: prod
+    become: yes
+    tasks:
+    - name: Ensure tomcat is present
+      apt:
+        name: tomcat8
+        state: present
+    - name: Ensure tomcat service is started
+      service:
+        name: tomcat8
+        state: started
+    - name: Copy war file
+      fetch:
+        src: /var/lib/tomcat8/webapps/
+        dest: /ust/myapp/target/hello-1.0.war-{{comp}}
 
-- name: start tomcat
-  hosts: prod
-  become: yes
-  tasks:
-  - name: Ensure tomcat is present
-    apt:
-      name: tomcat
-      state: present
-  - name: Ensure tomcat service is started
-    service:
-      name: tomcat
-      state: started
-
-
+    
